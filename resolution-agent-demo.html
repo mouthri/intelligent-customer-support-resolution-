@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ResolveAI – Customer Support Demo</title>
+<style>
+:root{--bg:#070b1a;--card:#0e1630;--card2:#131d3d;--line:#223063;--tx:#e8eeff;--mu:#8fa0cc;--ac:#1ea7ff;--ac2:#7c5cff;--ok:#2ee6a6;--bad:#ff5c7a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3ff;--card:#fff;--card2:#f1f5ff;--line:#cfd9f5;--tx:#0b1533;--mu:#51608a}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "DM Sans",system-ui,-apple-system,Segoe UI,sans-serif}
+h1,h2,h3{margin:0}.wrap{max-width:1200px;margin:0 auto;padding:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}.brand b{color:var(--ac)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 14px;color:#fff;background:linear-gradient(90deg,var(--ac),var(--ac2));font-weight:600}
+button.g{background:var(--card2);color:var(--tx);border:1px solid var(--line)}button:disabled{opacity:.5}
+input,select,textarea{width:100%;background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+label{display:block;font-size:13px;color:var(--mu);margin:0 0 4px}.f{margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#p1{max-width:720px;margin:20px auto}#p1 h1{font-size:30px;margin:6px 0}#p1 p{color:var(--mu)}
+.err{color:var(--bad);font-size:12px;min-height:14px}
+#p2{display:none}.main{display:grid;grid-template-columns:minmax(300px,.8fr) 1.3fr;gap:16px;align-items:start}
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:12px 0}
+.pr{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.pr .e{font-size:34px}.pr small{color:var(--mu)}.pr button{margin-top:6px;width:100%;padding:6px}
+.ord{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.tag{padding:2px 8px;border-radius:99px;font-size:11px;background:var(--card2);border:1px solid var(--line);white-space:nowrap}
+.Delayed{color:#ffb84d}.Delivered,.Refunded{color:var(--ok)}.Cancelled{color:var(--bad)}.Placed,.Shipped{color:var(--ac)}
+.chat{display:flex;flex-direction:column;height:min(78vh,720px);border:1px solid var(--ac);box-shadow:0 0 30px #1ea7ff22}
+.ch{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ch small{color:var(--mu)}.ch label{display:inline;margin:0;font-size:12px}.ch input{width:auto}
+#log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.u{align-self:flex-end;background:#1b3a8a;color:#fff}.m.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line)}
+.src{display:block;margin-top:6px;font-size:11px;color:var(--ac)}
+.steps{align-self:flex-start;border:1px solid var(--ac);border-radius:12px;padding:10px 14px;font-size:13px;background:var(--card);min-width:240px}
+.steps b{color:var(--ac);display:block;margin-bottom:4px}.steps div{color:var(--tx)}.steps i{color:var(--ok);font-style:normal;margin-right:6px}.steps .x i{color:var(--bad)}
+.hand{align-self:flex-start;border:1px solid var(--ac2);border-radius:12px;padding:10px 14px;font-size:13px;background:var(--card);max-width:90%}
+.hand b{color:var(--ac2)}.hand ul{margin:4px 0 0;padding-left:18px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 8px}.chips button{font-size:12px;padding:5px 10px}
+.in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+@media(max-width:860px){.main{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<!-- PAGE 1 -->
+<section id="p1">
+ <div class="brand">🤖 Resolve<b>AI</b></div>
+ <div class="card" style="margin-top:14px">
+  <h1>Welcome! Tell us about you</h1>
+  <p>Your details help our AI agent deliver faster, personalised support.</p>
+  <div class="grid2">
+   <div class="f"><label>Full name *</label><input id="name" placeholder="Rahul Sharma"><div class="err" id="e_name"></div></div>
+   <div class="f"><label>Mobile number *</label><input id="phone" inputmode="numeric" placeholder="10-digit number"><div class="err" id="e_phone"></div></div>
+  </div>
+  <div class="f"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+  <div class="f"><label>Delivery address *</label><textarea id="addr" rows="2" placeholder="House no, street, area"></textarea><div class="err" id="e_addr"></div></div>
+  <div class="grid2">
+   <div class="f"><label>City *</label><input id="city" placeholder="Vijayawada"><div class="err" id="e_city"></div></div>
+   <div class="f"><label>Pincode *</label><input id="pin" inputmode="numeric" placeholder="6 digits"><div class="err" id="e_pin"></div></div>
+  </div>
+  <div class="grid2">
+   <div class="f"><label>Notification preference</label><select id="notif"><option>Email notifications</option><option>SMS notifications</option><option>WhatsApp</option></select></div>
+   <div class="f"><label>If something goes wrong, I prefer</label><select id="pref"><option value="replacement">Replacement</option><option value="refund">Refund</option></select></div>
+  </div>
+  <button id="go" style="width:100%;padding:12px">Continue to shop &amp; support →</button>
+ </div>
+</section>
+
+<!-- PAGE 2 -->
+<section id="p2">
+ <div class="top"><div class="brand">🤖 Resolve<b>AI</b></div><div><span id="hi" style="color:var(--mu)"></span> <button class="g" id="back">Edit details</button></div></div>
+ <div class="main">
+  <div class="card">
+   <h2>🛒 Book products</h2>
+   <div class="prods" id="prods"></div>
+   <h3 style="font-size:16px">📦 My orders</h3><div id="ords"></div>
+  </div>
+  <div class="card chat">
+   <div class="ch"><div><h2 style="font-size:18px">AI Resolution Agent</h2><small>Understand → Investigate → Act → Verify → Resolve</small></div>
+    <label><input type="checkbox" id="fail"> simulate API failure</label></div>
+   <div id="log"></div>
+   <div class="chips" id="chips"></div>
+   <div class="in"><input id="msg" placeholder="Describe your delivery problem…" autocomplete="off"><button id="send">Send</button></div>
+  </div>
+ </div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const PRODUCTS=[["Smart Watch","⌚",3999],["Wireless Earbuds","🎧",2499],["Running Shoes","👟",1899],["Backpack","🎒",1299],["Bluetooth Speaker","🔊",2199],["Phone Case","📱",399]];
+const KB=[
+["Shipping Policy","Standard delivery takes 3-5 business days. Delayed orders are usually delivered within 48 hours of the revised date. If an order is more than 3 days late, we offer a refund or replacement."],
+["Refund Policy","Refunds are available within 7 days of delivery for unused items. Refunds are processed to the original payment method in 5-7 business days. Refunds above Rs 5000 and duplicate payment refunds need human approval."],
+["Cancellation Policy","Orders can be cancelled free of charge before they are delivered. Once cancelled, the paid amount is refunded in 5-7 business days."],
+["Address Change Policy","The delivery address can be changed only while the order is Placed or Shipped. After delivery it cannot be changed."],
+["Warranty Policy","All products carry a 1 year manufacturer warranty covering defects. Physical damage and water damage are not covered."],
+["Replacement Policy","Damaged or defective items can be replaced within 7 days of delivery. Replacement ships in 2 business days."],
+["Troubleshooting","If a device does not power on, charge it for 30 minutes and hold the power button for 10 seconds. If it still fails, raise a replacement request."]];
+let user={},orders=[],ctx={pending:null,order:null,acts:[],turns:0,tools:[],kb:[]},nextId=48300,ticketNo=9000;
+
+/* ---------- Page 1 ---------- */
+const need=(id,ok,msg)=>{$('#e_'+id).textContent=ok?'':msg;return ok};
+$('#go').onclick=()=>{
+ const v=id=>$('#'+id).value.trim();
+ const a=need('name',v('name').length>1,'Enter your name'),b=need('phone',/^\d{10}$/.test(v('phone')),'Enter a 10-digit number'),
+ c=need('addr',v('addr').length>5,'Enter your address'),d=need('city',v('city').length>1,'Enter city'),e=need('pin',/^\d{6}$/.test(v('pin')),'Enter 6-digit pincode');
+ if(!(a&&b&&c&&d&&e))return;
+ user={name:v('name'),phone:v('phone'),email:v('email'),addr:v('addr')+', '+v('city')+' - '+v('pin'),notif:$('#notif').value,pref:$('#pref').value};
+ try{localStorage.setItem('rai_user',JSON.stringify(user))}catch(_){}
+ start();
+};
+$('#back').onclick=()=>{$('#p2').style.display='none';$('#p1').style.display='block'};
+
+/* ---------- Page 2 ---------- */
+function seed(){orders=[
+ {id:'48291',item:"Smart Watch",price:3999,status:'Delayed',eta:'tomorrow',days:0,paid:2,addr:user.addr},
+ {id:'48100',item:"Wireless Earbuds",price:2499,status:'Delivered',days:3,paid:1,addr:user.addr},
+ {id:'48077',item:"Backpack",price:1299,status:'Shipped',days:0,paid:2,addr:user.addr,dup:true}];
+ // 48077: paid twice (demo of duplicate-payment escalation)
+}
+function start(){
+ $('#p1').style.display='none';$('#p2').style.display='block';$('#hi').textContent='Hi, '+user.name.split(' ')[0]+' 👋';
+ if(!orders.length)seed();
+ $('#prods').innerHTML=PRODUCTS.map((p,i)=>`<div class="pr"><div class="e">${p[1]}</div><div>${p[0]}</div><small>₹${p[2].toLocaleString('en-IN')}</small><button data-i="${i}">Book</button></div>`).join('');
+ $('#prods').querySelectorAll('button').forEach(b=>b.onclick=()=>book(+b.dataset.i));
+ renderOrders();
+ if(!$('#log').children.length){
+  say(`Hi ${esc(user.name.split(' ')[0])}! I'm your support agent. I can track orders, handle refunds, cancellations, address changes, and answer policy questions. What's the problem?`);
+  chips(['Where is my order #48291?','I want a refund for #48100','I was charged twice for #48077','What is the warranty policy?']);
+ }
+}
+function book(i){const p=PRODUCTS[i];orders.unshift({id:String(nextId++),item:p[0],price:p[2],status:'Placed',days:0,paid:1,addr:user.addr});renderOrders();
+ say(`✅ Order #${orders[0].id} placed: ${p[0]} (₹${p[2].toLocaleString('en-IN')}) to ${esc(user.addr)}. Need help with any order? Just ask.`)}
+function renderOrders(){$('#ords').innerHTML=orders.map(o=>`<div class="ord"><div><b>#${o.id}</b> ${o.item}<br><small style="color:var(--mu)">₹${o.price.toLocaleString('en-IN')}</small></div><span class="tag ${o.status}">${o.status}</span></div>`).join('')}
+
+/* ---------- Chat UI ---------- */
+const log=$('#log');
+function add(cls,html){const d=document.createElement('div');d.className=cls;d.innerHTML=html;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function say(h,src){add('m a',h+(src?`<span class="src">📚 Source: ${esc(src)}</span>`:''))}
+function chips(a){$('#chips').innerHTML='';a.forEach(t=>{const b=document.createElement('button');b.className='g';b.textContent=t;b.onclick=()=>handle(t);$('#chips').appendChild(b)})}
+function steps(title){const d=add('steps',`<b>${esc(title)}</b>`);return async(t,ok=true)=>{await sleep(380);const r=document.createElement('div');if(!ok)r.className='x';r.innerHTML=`<i>${ok?'✓':'✗'}</i>${esc(t)}`;d.appendChild(r);log.scrollTop=log.scrollHeight}}
+
+/* ---------- Tools (business functions) ---------- */
+const FLAKY=new Set(['check_refund_eligibility','create_refund','check_payment_records']);
+async function tool(name,fn,st){
+ for(let a=0;a<2;a++){
+  await sleep(250);
+  if(FLAKY.has(name)&&$('#fail').checked){await st(`${name}() failed${a?' again':' – retrying'}`,false);continue}
+  const r=fn();ctx.tools.push(name+'() → OK');return r}
+ throw new Error(name)}
+const find=id=>orders.find(o=>o.id===id);
+
+/* ---------- RAG ---------- */
+function rag(q){
+ const w=q.toLowerCase().match(/[a-z]{4,}/g)||[];let best=null,bs=0;
+ KB.forEach(k=>{let s=0;const t=(k[0]+' '+k[1]).toLowerCase();w.forEach(x=>{if(t.includes(x))s++;if(k[0].toLowerCase().includes(x))s+=2});if(s>bs){bs=s;best=k}});
+ return bs>=2?best:null}
+
+/* ---------- Intent detection ---------- */
+function detect(l){
+ if(/human|agent|person|manager|representative/.test(l))return'human';
+ if(/twice|duplicate|double|charged two/.test(l))return'duplicate';
+ if(/cancel/.test(l))return'cancel';
+ if(/address|change.*deliver|deliver.*(to|at) another/.test(l))return'address';
+ if(/refund|return|money back|replace|damaged|defect|broken/.test(l))return'refund';
+ if(/track|status|where|arriv|delay|late|not received|hasn|come yet|eta/.test(l))return'track';
+ return null}
+
+/* ---------- Escalation ---------- */
+async function escalate(reason,next){
+ const st=steps('Escalating to a human agent');
+ ctx.tickets=(ctx.tickets||0)+1;const t='T-'+(++ticketNo);
+ await st('Case summary prepared');await st(`Ticket ${t} created`);
+ add('hand',`<b>👩‍💼 Human agent receives:</b><ul><li>Complete conversation (${ctx.turns} messages)</li><li>Customer context: ${esc(user.name)}, prefers ${user.pref}, ${esc(user.notif)}</li><li>Retrieved knowledge: ${ctx.kb.length?esc([...new Set(ctx.kb)].join(', ')):'none'}</li><li>Actions performed: ${ctx.acts.length?esc(ctx.acts.join('; ')):'none'}</li><li>Tool results: ${ctx.tools.length?esc(ctx.tools.slice(-4).join('; ')):'none'}</li><li>Reason: ${esc(reason)}</li><li>Suggested next step: ${esc(next)}</li></ul>`);
+ say(`I've passed this to our support team with full context, so you won't need to repeat yourself. Your ticket is <b>${t}</b>. They'll reach you via ${esc(user.notif.toLowerCase())}.`);
+ ctx.pending=null}
+
+/* ---------- Main agent ---------- */
+let busy=false;
+async function handle(t){
+ t=t.trim();if(!t||busy)return;busy=true;$('#chips').innerHTML='';$('#msg').value='';
+ add('m u',esc(t));ctx.turns++;
+ try{await agent(t)}catch(e){await escalate('Tool failure after retry: '+e.message,'Complete the action manually and verify with customer')}
+ busy=false}
+async function agent(t){
+ const l=t.toLowerCase(),m=t.match(/\b(\d{5})\b/);
+ if(m){const o=find(m[1]);if(!o){say(`I couldn't find order #${m[1]} on your account. Please check the number, or pick one of yours: ${orders.map(o=>'#'+o.id).join(', ')}.`);return}ctx.order=o}
+ if(ctx.pending==='addr'&&!m&&t.length>8){return doAddress(t)}
+ if(ctx.pending==='choice'){if(/replac/.test(l))return doReplace();if(/refund|money/.test(l))return doRefund(true)}
+ let intent=detect(l)||(m&&ctx.pending)||null;
+ if(!intent){
+  const k=rag(t);
+  if(k){ctx.kb.push(k[0]);const st=steps('Searching knowledge base');await st('Relevant policy retrieved');say(esc(k[1]),k[0]);return}
+  say("I can help with order tracking, refunds/replacements, cancellations, address changes and policy questions. Could you tell me a bit more?");
+  chips(['Track my order','Refund / replacement','Cancel an order','Change address']);return}
+ if(intent==='human')return escalate('Customer requested a human agent','Review conversation and call the customer');
+ if(!ctx.order){
+  if(orders.length===1)ctx.order=orders[0];else{ctx.pending=intent;say('Sure — which order is this about?');chips(orders.map(o=>`#${o.id} ${o.item}`));return}}
+ const o=ctx.order;ctx.pending=null;
+ return ({track:doTrack,refund:doRefund,cancel:doCancel,address:doAddressAsk,duplicate:doDuplicate})[intent](o);
+}
+async function doTrack(o){
+ const st=steps('Agent actions in progress');
+ await st('Order identified: #'+o.id+' ('+o.item+')');
+ await tool('get_order_status',()=>o.status,st);await st('Order status retrieved: '+o.status);
+ const k=KB[0];ctx.kb.push(k[0]);await st('Delivery policy retrieved');await st('Expected delivery checked');
+ ctx.acts.push('Checked status of #'+o.id);
+ if(o.status==='Delayed')say(`Your order #${o.id} is currently delayed and is expected to arrive ${o.eta}. If it does not arrive by then, I can help you with the next available resolution.`,k[0]);
+ else if(o.status==='Delivered')say(`Order #${o.id} was delivered ${o.days} days ago. Is something wrong with it? I can help with a refund or replacement.`);
+ else if(o.status==='Cancelled'||o.status==='Refunded')say(`Order #${o.id} is ${o.status.toLowerCase()}.`);
+ else say(`Order #${o.id} (${o.item}) is ${o.status.toLowerCase()} and on its way to ${esc(o.addr)}. Standard delivery takes 3–5 business days.`,k[0]);
+}
+async function doRefund(o,force){
+ if(o===true){o=ctx.order;force=true}
+ const st=steps('Refund workflow');
+ await st('Order identified: #'+o.id);await tool('get_order_status',()=>o.status,st);await st('Order status: '+o.status);
+ const el=await tool('check_refund_eligibility',()=>o.status==='Delivered'&&o.days<=7,st);
+ ctx.kb.push('Refund Policy');
+ if(!el){await st('Not eligible for refund',false);
+  const why=o.status==='Delivered'?'it was delivered more than 7 days ago':o.status==='Refunded'||o.status==='Cancelled'?'it is already '+o.status.toLowerCase():`it has not been delivered yet (status: ${o.status})`;
+  say(`I'm sorry — order #${o.id} isn't eligible for a refund because ${why}. If you'd like, I can cancel it or connect you with a human agent.`,'Refund Policy');chips(['Cancel this order','Talk to a human']);return}
+ await st('Eligible for refund');
+ if(user.pref==='replacement'&&!force){ctx.pending='choice';say(`Order #${o.id} is eligible. I see you usually prefer a replacement — shall I arrange a replacement, or would you rather have a refund of ₹${o.price.toLocaleString('en-IN')}?`);chips(['Replacement','Refund']);return}
+ if(o.price>5000)return escalate('Refund above ₹5000 requires human approval','Approve refund');
+ await tool('create_refund',()=>{o.status='Refunded'},st);await st('Refund created');
+ await tool('verify_refund',()=>o.status==='Refunded',st);await st('Refund verified');
+ ctx.acts.push('Refund created for #'+o.id);ctx.pending=null;renderOrders();
+ say(`Done! ₹${o.price.toLocaleString('en-IN')} will be refunded to your original payment method in 5–7 business days. A confirmation will go out via ${esc(user.notif.toLowerCase())}.`,'Refund Policy');
+}
+async function doReplace(){const o=ctx.order,st=steps('Replacement workflow');
+ await st('Order identified: #'+o.id);await tool('create_ticket',()=>++ticketNo,st);await st('Replacement ticket T-'+ticketNo+' created');
+ ctx.acts.push('Replacement requested for #'+o.id);ctx.pending=null;ctx.kb.push('Replacement Policy');
+ say(`Replacement arranged (ticket T-${ticketNo}). It ships in 2 business days and I'll notify you by ${esc(user.notif.toLowerCase())}.`,'Replacement Policy')}
+async function doCancel(o){const st=steps('Cancellation workflow');
+ await st('Order identified: #'+o.id);await tool('get_order_status',()=>o.status,st);await st('Order status: '+o.status);ctx.kb.push('Cancellation Policy');
+ if(['Delivered','Cancelled','Refunded'].includes(o.status)){await st('Cannot cancel',false);say(`Order #${o.id} is already ${o.status.toLowerCase()} so it can't be cancelled. ${o.status==='Delivered'?'I can start a refund or replacement instead.':''}`,'Cancellation Policy');return}
+ await tool('cancel_order',()=>{o.status='Cancelled'},st);await st('Order cancelled');await st('Cancellation verified');
+ ctx.acts.push('Cancelled #'+o.id);renderOrders();say(`Order #${o.id} has been cancelled. Any amount paid will be refunded in 5–7 business days.`,'Cancellation Policy')}
+async function doAddressAsk(o){ctx.kb.push('Address Change Policy');
+ if(!['Placed','Shipped'].includes(o.status)){say(`Sorry, the address for order #${o.id} can't be changed because it is ${o.status.toLowerCase()}.`,'Address Change Policy');return}
+ ctx.pending='addr';say(`Order #${o.id} is ${o.status.toLowerCase()}, so I can update the address. Please type the new full delivery address.`)}
+async function doAddress(a){const o=ctx.order,st=steps('Address update');
+ await st('Order identified: #'+o.id);await tool('update_address',()=>{o.addr=a},st);await st('Address updated');await st('Change verified');
+ ctx.acts.push('Updated address of #'+o.id);ctx.pending=null;say(`Delivery address for #${o.id} is now: ${esc(a)}`)}
+async function doDuplicate(o){const st=steps('Payment investigation');
+ await st('Customer verified: '+user.name);await st('Order identified: #'+o.id);
+ const n=await tool('check_payment_records',()=>o.paid,st);await st('Payment records checked');
+ if(n>1){await st('Duplicate charge detected');ctx.acts.push('Detected duplicate charge on #'+o.id);ctx.kb.push('Refund Policy');
+  say(`I can confirm you were charged ${n} times for order #${o.id}. Refunding a duplicate payment needs human approval, so I'm escalating it now.`,'Refund Policy');
+  await escalate('Refund requires human approval.',`Approve refund of ₹${o.price.toLocaleString('en-IN')} for the duplicate charge`)}
+ else{await st('Only one charge found');say(`I checked and found only one charge for order #${o.id}. If your bank statement shows two, I can escalate to our payments team.`);chips(['Talk to a human'])}}
+
+$('#send').onclick=()=>handle($('#msg').value);
+$('#msg').onkeydown=e=>{if(e.key==='Enter')handle($('#msg').value)};
+try{const u=JSON.parse(localStorage.getItem('rai_user')||'null');if(u){$('#name').value=u.name;$('#phone').value=u.phone}}catch(_){}
+</script></body></html>
